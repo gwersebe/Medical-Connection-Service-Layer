@@ -1,0 +1,360 @@
+swagger: "2.0"
+info:
+  version: "1.0.1"
+  title: "Medical Connection"
+  description: "By Gabriel Wersebe"
+basePath: "/"
+schemes:
+  - "http"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+
+definitions:
+  Doctor:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      name:
+        type: "string"
+        example: "John Doe"
+      specialization:
+        type: "string"
+        example: "Cardiologist"
+      location:
+        type: "string"
+        example: "New York"
+
+  Patient:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 101
+      name:
+        type: "string"
+        example: "Jane Smith"
+      age:
+        type: "integer"
+        format: "int32"
+        example: 30
+      gender:
+        type: "string"
+        example: "Female"
+      address:
+        type: "string"
+        example: "123 Main St, Cityville"
+
+  Appointment:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 1001
+      doctor_id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      patient_id:
+        type: "integer"
+        format: "int64"
+        example: 101
+      date:
+        type: "string"
+        format: "date-time"
+        example: "2023-07-23T10:00:00Z"
+
+  MedicalRecord:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 5001
+      patient_id:
+        type: "integer"
+        format: "int64"
+        example: 101
+      doctor_id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      appointment_id:
+        type: "integer"
+        format: "int64"
+        example: 1001
+      diagnosis:
+        type: "string"
+        example: "Influenza"
+      prescription:
+        type: "string"
+        example: "Take rest and drink fluids."
+      notes:
+        type: "string"
+        example: "Patient should follow up in one week."
+
+  Symptom:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        example: 2001
+      name:
+        type: "string"
+        example: "Fever"
+      description:
+        type: "string"
+        example: "Elevated body temperature."
+
+  DoctorsSymptoms:
+    type: "object"
+    properties:
+      doctor_id:
+        type: "integer"
+        format: "int64"
+        example: 1
+      symptom_id:
+        type: "integer"
+        format: "int64"
+        example: 2001
+    required:
+      - doctor_id
+      - symptom_id
+
+  ErrorResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+        example: "An error occurred."
+
+
+paths:
+  /doctors:
+    get:
+      summary: "Get all doctors"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Doctor"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      summary: "Create a new doctor"
+      parameters:
+        - in: "body"
+          name: "doctor"
+          description: "Doctor object to be created"
+          schema:
+            $ref: "#/definitions/Doctor"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Doctor"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /patients:
+    get:
+      summary: "Get all patients"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Patient"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      summary: "Create a new patient"
+      parameters:
+        - in: "body"
+          name: "patient"
+          description: "Patient object to be created"
+          schema:
+            $ref: "#/definitions/Patient"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Patient"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /appointments:
+    get:
+      summary: "Get all appointments"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Appointment"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      summary: "Create a new appointment"
+      parameters:
+        - in: "body"
+          name: "appointment"
+          description: "Appointment object to be created"
+          schema:
+            $ref: "#/definitions/Appointment"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Appointment"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /medical-records:
+    get:
+      summary: "Get all medical records"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/MedicalRecord"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      summary: "Create a new medical record"
+      parameters:
+        - in: "body"
+          name: "medicalRecord"
+          description: "MedicalRecord object to be created"
+          schema:
+            $ref: "#/definitions/MedicalRecord"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/MedicalRecord"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /symptoms:
+    get:
+      summary: "Get all symptoms"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Symptom"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      summary: "Create a new symptom"
+      parameters:
+        - in: "body"
+          name: "symptom"
+          description: "Symptom object to be created"
+          schema:
+            $ref: "#/definitions/Symptom"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Symptom"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+  /doctors-symptoms:
+    get:
+      summary: "Get all doctor's symptoms"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DoctorsSymptoms"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+    post:
+      summary: "Create a new doctor's symptom"
+      parameters:
+        - in: "body"
+          name: "doctorSymptom"
+          description: "Doctor's symptom object to be created"
+          schema:
+            $ref: "#/definitions/DoctorsSymptoms"
+      responses:
+        201:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/DoctorsSymptoms"
+        400:
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/ErrorResponse"
